@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品川区 子育てサービスまとめ</title>
+  <meta name="description" content="品川区の妊娠・出産・子育てに関する公的サービスを個人的にまとめたサイトです。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- =========================================================== -->
+  <!-- Google Analytics (GA4)                                       -->
+  <!-- 設置時は GA_MEASUREMENT_ID を実際の測定ID(G-XXXXXXXXXX)に  -->
+  <!-- 置き換えて、下のコメントブロックを外してください。           -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+  -->
+  <!-- =========================================================== -->
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#/" class="site-title">品川区 子育てサービスまとめ</a>
+      <button class="back-button" id="backButton" type="button" hidden>← 戻る</button>
+    </div>
+  </header>
+
+  <main id="app">
+    <!-- ========== ホーム ========== -->
+    <section class="view view-home" id="view-home" aria-labelledby="homeHeading">
+      <h1 id="homeHeading" class="visually-hidden">品川区 子育てサービスまとめ</h1>
+      <div class="disclaimer" role="note">
+        <p>このサイトは、品川区における妊娠・出産・子育てに関する公的サービスを個人的にまとめたものです。2026年5月2日時点の情報に基づいています。制度内容は変更される可能性がありますので、利用前に必ず公式サイトでご確認ください。本サイトの利用により生じたいかなる不利益・損害についても、運営者は一切の責任を負いかねます。</p>
+      </div>
+
+      <nav class="home-nav" aria-label="ナビゲーション">
+        <a href="#/category" class="home-nav-button">
+          <span class="home-nav-emoji" aria-hidden="true">📂</span>
+          <span class="home-nav-label">カテゴリで探す</span>
+          <span class="home-nav-sub">用途別に絞り込み</span>
+        </a>
+        <a href="#/date" class="home-nav-button">
+          <span class="home-nav-emoji" aria-hidden="true">📅</span>
+          <span class="home-nav-label">日付で探す</span>
+          <span class="home-nav-sub">出産予定日・出産日から</span>
+        </a>
+      </nav>
+    </section>
+
+    <!-- ========== カテゴリで探す ========== -->
+    <section class="view view-category" id="view-category" aria-labelledby="categoryHeading" hidden>
+      <h2 id="categoryHeading" class="view-title">カテゴリで探す</h2>
+      <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="カテゴリ"></div>
+      <div class="card-list" id="categoryCardList" aria-live="polite"></div>
+    </section>
+
+    <!-- ========== 日付で探す ========== -->
+    <section class="view view-date" id="view-date" aria-labelledby="dateHeading" hidden>
+      <h2 id="dateHeading" class="view-title">日付で探す</h2>
+      <form class="date-form" id="dateForm">
+        <fieldset class="radio-group">
+          <legend>日付の種類</legend>
+          <label class="radio-label">
+            <input type="radio" name="dateType" value="due" checked>
+            <span>出産予定日</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="dateType" value="birth">
+            <span>出産日</span>
+          </label>
+        </fieldset>
+        <label class="date-input-label" for="dateInput">日付を入力</label>
+        <input type="date" id="dateInput" class="date-input" required>
+        <button type="submit" class="primary-button">サービスを探す</button>
+        <p class="date-form-note">※ 入力した日付は保存されません</p>
+      </form>
+
+      <div class="date-result" id="dateResult" hidden>
+        <p class="date-summary" id="dateSummary"></p>
+        <section class="result-section" id="sectionNow">
+          <h3 class="result-section-title">いますぐ使える / 申し込める</h3>
+          <div class="card-list" id="cardListNow"></div>
+        </section>
+        <section class="result-section" id="sectionSoon">
+          <h3 class="result-section-title">もうすぐ(30日以内)</h3>
+          <div class="card-list" id="cardListSoon"></div>
+        </section>
+        <section class="result-section" id="sectionLong">
+          <h3 class="result-section-title">継続して使えるもの</h3>
+          <div class="card-list" id="cardListLong"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== 詳細モーダル ========== -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="閉じる">×</button>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-tags" id="modalTags"></div>
+      <dl class="modal-body" id="modalBody"></dl>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="modal-official-link" id="modalOfficial" hidden>公式ページを開く ↗</a>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>個人運営。データ基準日: 2026年5月2日。情報は必ず公式サイトで最終確認してください。</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

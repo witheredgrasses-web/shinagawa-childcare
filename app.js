@@ -332,6 +332,9 @@
     els.modalTags = $('modalTags');
     els.modalBody = $('modalBody');
     els.modalOfficial = $('modalOfficial');
+    els.timelineButton = $('timelineButton');
+    els.imageModalOverlay = $('imageModalOverlay');
+    els.imageModalClose = $('imageModalClose');
   }
 
   function bindEvents() {
@@ -346,9 +349,35 @@
     els.modalOverlay.addEventListener('click', (e) => {
       if (e.target === els.modalOverlay) closeModal();
     });
+
+    if (els.timelineButton) {
+      els.timelineButton.addEventListener('click', openImageModal);
+    }
+    if (els.imageModalClose) {
+      els.imageModalClose.addEventListener('click', closeImageModal);
+    }
+    if (els.imageModalOverlay) {
+      els.imageModalOverlay.addEventListener('click', (e) => {
+        if (e.target === els.imageModalOverlay || e.target.classList.contains('image-modal-scroll')) {
+          closeImageModal();
+        }
+      });
+    }
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !els.modalOverlay.hidden) closeModal();
+      if (e.key !== 'Escape') return;
+      if (els.imageModalOverlay && !els.imageModalOverlay.hidden) closeImageModal();
+      else if (!els.modalOverlay.hidden) closeModal();
     });
+  }
+
+  function openImageModal() {
+    els.imageModalOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeImageModal() {
+    els.imageModalOverlay.hidden = true;
+    document.body.style.overflow = '';
   }
 
   async function init() {

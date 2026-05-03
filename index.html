@@ -51,6 +51,15 @@
           <span class="home-nav-sub">出産予定日・出産日から</span>
         </a>
       </nav>
+
+      <section class="home-timeline" aria-labelledby="timelineHeading">
+        <h2 id="timelineHeading" class="home-timeline-title">サービス全体タイムライン</h2>
+        <p class="home-timeline-sub">妊娠〜就学前までに使える主なサービスをひと目で確認</p>
+        <button class="timeline-thumbnail" type="button" id="timelineButton" aria-label="タイムライン画像を拡大表示">
+          <img src="timeline.png" alt="品川区 妊娠〜出産〜産後サービス タイムライン" loading="lazy">
+          <span class="timeline-zoom-hint" aria-hidden="true">🔍 タップで拡大</span>
+        </button>
+      </section>
     </section>
 
     <!-- ========== カテゴリで探す ========== -->
@@ -107,6 +116,14 @@
       <div class="modal-tags" id="modalTags"></div>
       <dl class="modal-body" id="modalBody"></dl>
       <a href="#" target="_blank" rel="noopener noreferrer" class="modal-official-link" id="modalOfficial" hidden>公式ページを開く ↗</a>
+    </div>
+  </div>
+
+  <!-- ========== 画像拡大モーダル ========== -->
+  <div class="image-modal-overlay" id="imageModalOverlay" role="dialog" aria-modal="true" aria-label="タイムライン拡大表示" hidden>
+    <button class="image-modal-close" id="imageModalClose" type="button" aria-label="閉じる">×</button>
+    <div class="image-modal-scroll">
+      <img src="timeline.png" alt="品川区 妊娠〜出産〜産後サービス タイムライン">
     </div>
   </div>
 

@@ -59,7 +59,7 @@
 
   // ====== データ読込 ======
   async function loadServices() {
-    const res = await fetch('services.json');
+    const res = await fetch('services.json', { cache: 'no-store' });
     if (!res.ok) throw new Error('services.json の読込に失敗しました');
     const data = await res.json();
     state.services = data.services;
@@ -89,13 +89,25 @@
 
   function renderCategoryCards() {
     const cat = state.activeCategory;
-    const list = state.services.filter(s => s.categories.includes(cat));
+    const list = cat === '全て'
+      ? state.services
+      : state.services.filter(s => s.categories.includes(cat));
     clear(els.categoryCardList);
     if (list.length === 0) {
       els.categoryCardList.appendChild(el('p', { class: 'result-empty' }, '該当するサービスはありません。'));
       return;
     }
     list.forEach(s => els.categoryCardList.appendChild(makeCard(s)));
+  }
+
+  // 「もらえるもの」(現金・品物・給付金)があるか
+  // 「自己負担」(助成・補助あり)かどうか
+  const SUBSIDY_RE = /助成|補助|割|給付|手当/;
+  function hasGiftBenefit(svc) {
+    return !!svc.benefit;
+  }
+  function isSubsidySelfPayment(svc) {
+    return !!(svc.self_payment && SUBSIDY_RE.test(svc.self_payment));
   }
 
   // ====== カード生成 ======
@@ -114,12 +126,24 @@
     timingRow.appendChild(document.createTextNode(svc.timing_text || '-'));
     card.appendChild(timingRow);
 
+    const hasGift = hasGiftBenefit(svc);
+    const isSubsidy = isSubsidySelfPayment(svc);
+
+    // サマリー: もらえるもの(現金・品物・給付金) は赤ハイライト。
+    // 助成・補助系のサービスは self_payment と内容がほぼ同じなので、サマリーは省略し自己負担側で表示。
     const summaryText = svc.benefit_summary || (svc.description ? svc.description.slice(0, 60) : '');
     if (summaryText) {
-      card.appendChild(el('div', { class: 'card-summary' }, summaryText));
+      if (hasGift) {
+        card.appendChild(el('div', { class: 'card-summary card-summary--benefit' }, summaryText));
+      } else if (!isSubsidy) {
+        card.appendChild(el('div', { class: 'card-summary' }, summaryText));
+      }
     }
+
+    // 自己負担: 助成・補助ありは青ハイライトで強調、それ以外は小さなピル表示
     if (svc.self_payment) {
-      card.appendChild(el('div', { class: 'card-payment' }, '自己負担: ' + svc.self_payment));
+      const cls = isSubsidy ? 'card-payment-highlight' : 'card-payment';
+      card.appendChild(el('div', { class: cls }, '自己負担: ' + svc.self_payment));
     }
     if (opts.statusText) {
       card.appendChild(el('div', { class: 'card-status' }, opts.statusText));
@@ -248,7 +272,7 @@
     addRow('時期', svc.timing_text);
     addRow('予約方法', svc.reservation);
     addRow('場所', svc.location);
-    addRow('自己負担', svc.self_payment);
+    addRow('自己負担', svc.self_payment, isSubsidySelfPayment(svc) ? 'modal-dd-subsidy' : null);
     addBenefitRow(svc.benefit);
     addRow('内容', svc.description);
     addRow('補足条件', svc.notes);
@@ -265,16 +289,16 @@
     document.body.style.overflow = 'hidden';
   }
 
-  function addRow(label, value) {
+  function addRow(label, value, ddClass) {
     if (!value) return;
     els.modalBody.appendChild(el('dt', null, label));
-    els.modalBody.appendChild(el('dd', null, value));
+    els.modalBody.appendChild(el('dd', ddClass ? { class: ddClass } : null, value));
   }
 
   function addBenefitRow(benefit) {
     if (!benefit) return;
     els.modalBody.appendChild(el('dt', null, 'もらえるもの'));
-    const dd = el('dd');
+    const dd = el('dd', { class: 'modal-dd-benefit' });
     if (Array.isArray(benefit)) {
       const ul = el('ul');
       benefit.forEach(b => ul.appendChild(el('li', null, b)));

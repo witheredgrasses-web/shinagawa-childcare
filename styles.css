@@ -16,6 +16,14 @@
   --pink-bg:     #F8EBEF;
   --pink:        #E69BAB;
   --pink-deep:   #D27F92;
+  /* 「もらえるもの」(現金・品物・給付金)= 赤系統 */
+  --benefit-bg:    #FFE2E9;
+  --benefit-text:  #B53155;
+  --benefit-accent:#DC4068;
+  /* 「自己負担」(助成・補助あり)= 青系統 */
+  --subsidy-bg:    #DCE9F5;
+  --subsidy-text:  #1F5C95;
+  --subsidy-accent:#3A7AB8;
   --blue-soft:   #E1ECF4;
   --blue:        #8FB4D0;
   --text:        #3D3936;
@@ -219,6 +227,29 @@ main {
   font-size: 0.875rem;
   line-height: 1.7;
   color: var(--text);
+}
+/* もらえるもの(現金・品物・給付金)用ハイライト = 赤 */
+.card-summary.card-summary--benefit {
+  background: var(--benefit-bg);
+  color: var(--benefit-text);
+  font-family: var(--font-h);
+  font-weight: 500;
+  padding: 10px 12px 10px 14px;
+  border-radius: var(--r-s);
+  border-left: 3px solid var(--benefit-accent);
+  line-height: 1.65;
+}
+/* 自己負担(助成・補助あり)用ハイライト = 青 */
+.card-payment-highlight {
+  margin-top: 12px;
+  background: var(--subsidy-bg);
+  color: var(--subsidy-text);
+  font-family: var(--font-h);
+  font-weight: 500;
+  padding: 10px 12px 10px 14px;
+  border-radius: var(--r-s);
+  border-left: 3px solid var(--subsidy-accent);
+  line-height: 1.65;
 }
 .card-payment {
   margin-top: 10px;
@@ -424,6 +455,32 @@ main {
 }
 .modal-body dd ul li {
   margin-bottom: 4px;
+}
+/* もらえるもの行 = 赤 */
+.modal-body dd.modal-dd-benefit {
+  background: var(--benefit-bg);
+  color: var(--benefit-text);
+  font-family: var(--font-h);
+  font-weight: 500;
+  padding: 10px 14px 10px 16px;
+  border-radius: var(--r-s);
+  border-left: 3px solid var(--benefit-accent);
+  line-height: 1.7;
+}
+.modal-body dd.modal-dd-benefit ul {
+  margin-left: 20px;
+  margin-top: 4px;
+}
+/* 自己負担行(助成・補助あり) = 青 */
+.modal-body dd.modal-dd-subsidy {
+  background: var(--subsidy-bg);
+  color: var(--subsidy-text);
+  font-family: var(--font-h);
+  font-weight: 500;
+  padding: 10px 14px 10px 16px;
+  border-radius: var(--r-s);
+  border-left: 3px solid var(--subsidy-accent);
+  line-height: 1.7;
 }
 .modal-official-link {
   display: block;
